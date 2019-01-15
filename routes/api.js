@@ -4,29 +4,16 @@ const db = require("../db.json");
 const productManager = require("../manager/products");
 
 router.get("/discs", function(req, res, next) {
-  // res.set({ "X-Total-Count": db.discs.length });
-  // const limit = req.query["_limit"];
-  // const page = req.query["_page"];
-  // let sendData;
-  // if (page) {
-  //   if (limit) {
-  //     let start = limit * page - limit;
-  //     let end = limit * page;
-  //     sendData = db.discs.slice(start, end);
-  //   } else {
-  //     sendData = db.discs;
-  //   }
-  // } else {
-  //   sendData = db.discs.slice(0, limit);
-  // }
-
-  productManager
-    .countProducts()
-    .then(el => res.set({ "X-Total-Count": Number(el.count) }));
+  // productManager
+  //   .countProducts()
+  //   .then(el => res.set({ "X-Total-Count": Number(el.count) }));
   const limit = req.query["_limit"] || 6;
   const page = req.query["_page"] || 1;
   const offset = limit * page - limit;
-  productManager.getProducts(offset, limit).then(result => res.json(result));
+  productManager.getProducts(offset, limit).then(result => {
+    res.set({ "X-Total-Count": result.pagination.rowCount });
+    return res.json(result);
+  });
 });
 
 router.param("id", (req, res, next, id) => {
@@ -52,14 +39,14 @@ router.post("/discs", (req, res, next) => {
 router.delete("/discs/:id", (req, res, next) => {
   productManager
     .deleteProducts(req.params.id)
-    .then(el => res.send("Deleted element " + el.id))
+    .then(el => res.send("Deleted element " + req.params.id))
     .catch(e => next(e));
 });
 
 router.patch("/discs/:id", (req, res, next) => {
   productManager
-    .updateProducts(req.params.id, req.body)
-    .then(el => res.send("Update element " + el.id))
+    .updateProduct(req.params.id, req.body)
+    .then(el => res.send("Update element " + req.params.id))
     .catch(e => next(e));
 });
 module.exports = router;
