@@ -19,6 +19,10 @@ router.get("/discs", function(req, res, next) {
   // } else {
   //   sendData = db.discs.slice(0, limit);
   // }
+
+  productManager
+    .countProducts()
+    .then(el => res.set({ "X-Total-Count": Number(el.count) }));
   const limit = req.query["_limit"] || 6;
   const page = req.query["_page"] || 1;
   const offset = limit * page - limit;
@@ -37,5 +41,25 @@ router.param("id", (req, res, next, id) => {
 
 router.get("/discs/:id", (req, res, next) => {
   res.send(res.product);
+});
+
+router.post("/discs", (req, res, next) => {
+  productManager
+    .insertProduct(req.body)
+    .then(el => res.send("Add element " + el.id));
+});
+
+router.delete("/discs/:id", (req, res, next) => {
+  productManager
+    .deleteProducts(req.params.id)
+    .then(el => res.send("Deleted element " + el.id))
+    .catch(e => next(e));
+});
+
+router.patch("/discs/:id", (req, res, next) => {
+  productManager
+    .updateProducts(req.params.id, req.body)
+    .then(el => res.send("Update element " + el.id))
+    .catch(e => next(e));
 });
 module.exports = router;

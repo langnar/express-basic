@@ -8,4 +8,27 @@ const getProductById = id => {
   return model.getProductById(id);
 };
 
-module.exports = { getProducts, getProductById };
+const countProducts = () => {
+  return model.countProducts();
+};
+
+const insertProduct = product => {
+  return model.insertProduct(product);
+};
+
+const deleteProducts = id => {
+  return model.deleteProducts(id);
+};
+
+const updateProducts = (id, product) => {
+  return model.updateProducts(id, product);
+};
+
+module.exports = {
+  getProducts,
+  getProductById,
+  countProducts,
+  insertProduct,
+  deleteProducts,
+  updateProducts
+};
