@@ -15,10 +15,6 @@ const getProductById = id => {
   }).fetch();
 };
 
-// const countProducts = () => {
-//   return model.countProducts();
-// };
-
 const insertProduct = product =>
   Products.forge({
     name: product.name,

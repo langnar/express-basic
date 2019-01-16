@@ -1,20 +1,30 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
+const genuuid = require("uuid");
 var logger = require("morgan");
+const session = require("express-session");
 
 var apiRouter = require("./routes/api");
+var authRouter = require("./routes/auth");
 
 var app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(
+  session({
+    genid: () => genuuid(),
+    secret: "helpme",
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
 app.use("/assets", express.static(path.join(__dirname, "public")));
 app.use("/api", apiRouter);
+app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

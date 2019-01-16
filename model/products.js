@@ -15,4 +15,8 @@ const Description = bookshelf.Model.extend({
   tableName: "description"
 });
 
-module.exports = { Products, Description };
+const Users = bookshelf.Model.extend({
+  tableName: "users"
+});
+
+module.exports = { Products, Description, Users };

@@ -4,9 +4,6 @@ const db = require("../db.json");
 const productManager = require("../manager/products");
 
 router.get("/discs", function(req, res, next) {
-  // productManager
-  //   .countProducts()
-  //   .then(el => res.set({ "X-Total-Count": Number(el.count) }));
   const limit = req.query["_limit"] || 6;
   const page = req.query["_page"] || 1;
   const offset = limit * page - limit;
